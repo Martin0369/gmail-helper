@@ -1,40 +1,41 @@
-# Gmail 附件處理助手
+# Gmail Helper
 
-這個專案可以自動處理 Gmail 中的附件，特別是發票等文件，並將其整理存放到 Google Drive 中。
+An automated system that processes Gmail attachments, particularly invoices and other business documents, and organizes them in Google Drive with intelligent categorization.
 
-## 功能特點
+## Features
 
-- 自動處理 Gmail 中的附件
-- 智能識別文件類型（發票、報價單、合約等）
-- 使用 OCR 技術提取文件內容
-- 根據日期、寄件者和文件類型自動整理檔案
-- 支援多種發票格式的資訊提取
-- 自動建立有組織的資料夾結構
+- Automatic Gmail attachment processing
+- Smart document type identification (invoices, quotations, contracts, etc.)
+- OCR-powered content extraction
+- Intelligent file organization based on date, sender, and document type
+- Multi-format invoice information extraction
+- Automated folder structure creation
+- Support for multiple languages (English, Traditional Chinese)
 
-## 系統需求
+## System Requirements
 
-- Python 3.8 或更高版本
-- Windows、macOS 或 Linux 作業系統
-- 網際網路連線
-- Google 帳號
+- Python 3.8 or higher
+- Windows, macOS, or Linux operating system
+- Internet connection
+- Google account
 
-### Windows 特殊需求
+### Windows-specific Requirements
 
-Windows 用戶需要安裝 Poppler，用於 PDF 處理：
-1. 下載 [Poppler for Windows](https://github.com/oschwartz10612/poppler-windows/releases/)
-2. 解壓縮到 `C:\Program Files\poppler`
-3. 將 `C:\Program Files\poppler\Library\bin` 加入系統環境變數 PATH
+Windows users need to install Poppler for PDF processing:
+1. Download [Poppler for Windows](https://github.com/oschwartz10612/poppler-windows/releases/)
+2. Extract to `C:\Program Files\poppler`
+3. Add `C:\Program Files\poppler\Library\bin` to system PATH
 
-### macOS 特殊需求
+### macOS-specific Requirements
 
-使用 Homebrew 安裝 Poppler：
+Install Poppler using Homebrew:
 ```bash
 brew install poppler
 ```
 
-### Linux 特殊需求
+### Linux-specific Requirements
 
-安裝 Poppler：
+Install Poppler using package manager:
 ```bash
 # Ubuntu/Debian
 sudo apt-get install poppler-utils
@@ -43,15 +44,15 @@ sudo apt-get install poppler-utils
 sudo yum install poppler-utils
 ```
 
-## 安裝步驟
+## Installation
 
-1. 克隆或下載此專案：
+1. Clone or download this repository:
    ```bash
-   git clone [repository_url]
+   git clone https://github.com/Martin0369/gmail-helper.git
    cd gmail-helper
    ```
 
-2. 建立並啟動虛擬環境：
+2. Create and activate virtual environment:
    ```bash
    # Windows
    python -m venv venv
@@ -62,82 +63,113 @@ sudo yum install poppler-utils
    source venv/bin/activate
    ```
 
-3. 安裝依賴套件：
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. 下載中文語言模型：
+4. Download Chinese language model:
    ```bash
    python -m spacy download zh_core_web_sm
    ```
 
-## 設定步驟
+## Configuration
 
-1. 建立 Google Cloud Project 並啟用必要的 API：
+1. Create Google Cloud Project and enable required APIs:
    - Gmail API
    - Google Drive API
    - Cloud Vision API
 
-2. 下載 Google Cloud 憑證：
-   - 建立服務帳號並下載金鑰檔案（JSON 格式）
-   - 將金鑰檔案重新命名為 `credentials.json` 並放在專案根目錄
+2. Download Google Cloud credentials:
+   - Create a service account and download the key file (JSON format)
+   - Rename the key file to `credentials.json` and place it in the project root
 
-3. 建立設定檔：
-   - 複製 `config.example.py` 為 `config.py`
-   - 根據需求修改設定值
+3. Set up configuration:
+   - Copy `config.example.py` to `config.py`
+   - Modify settings as needed
 
-## 使用方法
+## Usage
 
-1. 確保已完成所有設定步驟
+1. Ensure all setup steps are completed
 
-2. 執行程式：
+2. Run the program:
    ```bash
    python main.py
    ```
 
-3. 程式會自動：
-   - 檢查 Gmail 中的新郵件
-   - 下載並處理附件
-   - 將文件整理並上傳到 Google Drive
+3. The program will automatically:
+   - Check for new emails in Gmail
+   - Download and process attachments
+   - Organize and upload documents to Google Drive
 
-## 資料夾結構
+## Folder Structure
 
-程式會在 Google Drive 中建立以下結構：
+The program creates the following structure in Google Drive:
 ```
 YYYY_MM/
-  ├── 寄件者/
-  │   ├── 郵件主旨/
-  │   │   ├── invoice_YYYYMMDD_賣方_發票號碼.pdf
+  ├── Sender/
+  │   ├── Email Subject/
+  │   │   ├── invoice_YYYYMMDD_Vendor_InvoiceNumber.pdf
   │   │   └── ...
   │   └── ...
   └── ...
 ```
 
-## 故障排除
+## Troubleshooting
 
-1. PDF 轉換失敗
-   - 確認 Poppler 已正確安裝
-   - 檢查系統環境變數設定
+1. PDF Conversion Issues
+   - Verify Poppler installation
+   - Check system PATH settings
 
-2. OCR 辨識失敗
-   - 確認 Google Cloud Vision API 已啟用
-   - 檢查憑證檔案設定
+2. OCR Recognition Issues
+   - Ensure Google Cloud Vision API is enabled
+   - Verify credentials file configuration
 
-3. 權限問題
-   - 確認服務帳號擁有必要的權限
-   - 檢查 Gmail API 和 Drive API 的授權範圍
+3. Permission Issues
+   - Confirm service account has necessary permissions
+   - Check Gmail API and Drive API authorization scopes
 
-## 注意事項
+## Document Processing
 
-- 請確保 Google Cloud 專案有足夠的配額
-- 定期檢查日誌檔案了解系統運行狀況
-- 建議定期備份重要文件
+The system can process various types of documents:
+- Invoices (Traditional Chinese and English)
+- Quotations
+- Contracts
+- Purchase Orders
+- Receipts
 
-## 授權
+### Invoice Processing Features
+- Extracts invoice numbers
+- Identifies vendor information
+- Captures invoice dates
+- Processes amount information
+- Handles multiple invoice formats
 
-[授權說明]
+## Security
 
-## 貢獻
+- All sensitive information is stored locally
+- Credentials are never committed to version control
+- Uses secure API authentication
+- Implements file access controls
 
-歡迎提交 Issue 或 Pull Request 來改善這個專案。 
+## Best Practices
+
+- Regularly check log files for system status
+- Back up important documents periodically
+- Monitor Google Cloud project quotas
+- Keep dependencies updated
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues or pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Google Cloud Platform for API services
+- Spacy for NLP processing
+- PyMuPDF and pdf2image for document processing
+- All contributors and users of this project 
