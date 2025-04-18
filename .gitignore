@@ -4,6 +4,10 @@ config.py
 *.key
 *.pem
 .env
+token.json
+token.pickle
+*_token.json
+*_token.pickle
 
 # Python
 __pycache__/
