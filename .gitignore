@@ -1,3 +1,10 @@
+# Credentials and configuration
+credentials.json
+config.py
+*.key
+*.pem
+.env
+
 # Python
 __pycache__/
 *.py[cod]
@@ -30,19 +37,24 @@ ENV/
 .vscode/
 *.swp
 *.swo
+.DS_Store
 
 # Logs
 *.log
 logs/
-log/
 
-# Credentials and Configs
-credentials.json
-config.py
-.env
-token.pickle
-*.key
+# Test files
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
 
-# OS
-.DS_Store
-Thumbs.db 
+# Temporary files
+tmp/
+temp/
+downloads/
+uploads/
+
+# Local development
+local_settings.py
+db.sqlite3 

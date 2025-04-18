@@ -1,5 +1,6 @@
 import os
 import pickle
+import logging
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -11,6 +12,7 @@ from datetime import datetime
 
 class DriveService:
     def __init__(self):
+        """Initialize the Drive service."""
         self.service = self._get_drive_service()
         
     def _get_drive_service(self):
@@ -47,27 +49,35 @@ class DriveService:
         """Get existing folder or create new one."""
         try:
             # Search for existing folder
-            query = f"name='{folder_name}' and mimeType='application/vnd.google-apps.folder'"
+            query = [
+                f"name='{folder_name}'",
+                "mimeType='application/vnd.google-apps.folder'",
+                "trashed=false"
+            ]
+            
             if parent_folder_id:
-                query += f" and '{parent_folder_id}' in parents"
+                query.append(f"'{parent_folder_id}' in parents")
             else:
-                query += f" and '{config.DRIVE_FOLDER_ID}' in parents"
+                query.append(f"'{config.DRIVE_FOLDER_ID}' in parents")
                 
             results = self.service.files().list(
-                q=query,
+                q=' and '.join(query),
                 spaces='drive',
-                fields='files(id, name)'
+                fields='files(id, name, parents)',
+                orderBy='createdTime desc'
             ).execute()
             
             files = results.get('files', [])
             
+            # Return the first matching folder
             if files:
                 return files[0]['id']
-            else:
-                return self.create_folder(folder_name, parent_folder_id)
+                
+            # Create new folder if none exists
+            return self.create_folder(folder_name, parent_folder_id)
                 
         except Exception as e:
-            print(f"Error getting/creating folder: {str(e)}")
+            logger.error(f"Error getting/creating folder: {str(e)}")
             return None
     
     def create_folder(self, folder_name, parent_folder_id=None):
@@ -81,13 +91,18 @@ class DriveService:
             
             file = self.service.files().create(
                 body=file_metadata,
-                fields='id'
+                fields='id, name, parents'
             ).execute()
             
-            return file.get('id')
+            folder_id = file.get('id')
+            if not folder_id:
+                logger.error(f"Failed to create folder: {folder_name}")
+                return None
+                
+            return folder_id
             
         except Exception as e:
-            print(f"Error creating folder: {str(e)}")
+            logger.error(f"Error creating folder: {str(e)}")
             return None
     
     def upload_file(self, file_data, filename, mime_type, folder_id):
@@ -143,4 +158,7 @@ class DriveService:
             
         except Exception as e:
             print(f"Error updating file metadata: {str(e)}")
-            return False 
+            return False
+            
+    # Add alias for get_or_create_folder
+    create_folder_if_not_exists = get_or_create_folder 

@@ -86,7 +86,11 @@ sudo yum install poppler-utils
 
 3. Set up configuration:
    - Copy `config.example.py` to `config.py`
-   - Modify settings as needed
+   - Configure invoice processing settings:
+     - Set preferred date format
+     - Configure vendor name extraction rules
+     - Adjust folder naming conventions
+     - Set file organization preferences
 
 ## Usage
 
@@ -104,12 +108,27 @@ sudo yum install poppler-utils
 
 ## Folder Structure
 
-The program creates the following structure in Google Drive:
+The program creates different folder structures based on document types:
+
+### For Invoices
+```
+YYYY/
+  ├── MM/
+  │   ├── Vendor/
+  │   │   ├── InvoiceNumber/
+  │   │   │   ├── invoice_YYYYMMDD_Vendor_InvoiceNumber.pdf
+  │   │   │   └── ...
+  │   │   └── ...
+  │   └── ...
+  └── ...
+```
+
+### For Other Documents
 ```
 YYYY_MM/
   ├── Sender/
   │   ├── Email Subject/
-  │   │   ├── invoice_YYYYMMDD_Vendor_InvoiceNumber.pdf
+  │   │   ├── document_YYYYMMDD_Sender.pdf
   │   │   └── ...
   │   └── ...
   └── ...
@@ -139,11 +158,15 @@ The system can process various types of documents:
 - Receipts
 
 ### Invoice Processing Features
-- Extracts invoice numbers
-- Identifies vendor information
-- Captures invoice dates
-- Processes amount information
-- Handles multiple invoice formats
+- Advanced invoice number extraction using standardized patterns
+- Comprehensive vendor information identification
+- Multi-format date extraction and standardization
+- Detailed amount information processing including tax calculations
+- Support for both traditional and simplified invoice formats
+- Intelligent folder organization based on invoice metadata
+- Automatic handling of special characters in folder names
+- Smart duplicate detection and version control
+- Standardized naming conventions for better organization
 
 ## Security
 
